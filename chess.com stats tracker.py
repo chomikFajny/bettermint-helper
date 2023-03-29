@@ -77,6 +77,7 @@ with open("proxies.txt", "r") as f:
 name = input("name: ")
 timein = int(input("time of waiting till sending (seconds): "))
 webhookin = input("webhook link: ")
+mode = input("enter mode that u play play on: ")
 webhook = DiscordWebhook(url=webhookin)
 
 #Panel Profit
@@ -95,7 +96,6 @@ simpl = simplpromt()
 
 oldstat = requests.get(f"https://api.chess.com/pub/player/{name}/stats").json()
 #mode selector
-mode = 'rapid'
 mode = mode.lower()
 if mode == 'bullet':
     oldstat1 = oldstat["chess_bullet"]
