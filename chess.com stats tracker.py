@@ -73,6 +73,8 @@ with open("proxies.txt", "r") as f:
         line = line.strip()
         ip, port = line.split(":")
         proxies[ip] = port
+        
+startingtime = 0
 
 name = input("name: ")
 timein = int(input("time of waiting till sending (seconds): "))
@@ -137,8 +139,9 @@ while True:
     stat2 = stat1["last"]
     elo = stat2["rating"]
     if elo >= oldelo:
+        startingtime = (startingtime + timein) / 60
         e_change = elo - oldelo
-        wonweb = DiscordEmbed(title='Profit', description=f'Gain ``+{e_change}`` points\nNew elo: ``{elo}``', color='00ff00')
+        wonweb = DiscordEmbed(title='Profit', description=f'Gain ``+{e_change}`` points\nNew elo: ``{elo}``\nTime app is open ``{startingtime}``', color='00ff00')
         webhook.add_embed(wonweb)
         print("profit!")
         e_change = elo - oldelo
@@ -157,8 +160,9 @@ while True:
         oldelo = elo
         
     else:
+        startingtime = (startingtime + timein) / 60
         e_change = oldelo - elo
-        lostweb = DiscordEmbed(title='Lose', description=f'Lost ``-{e_change}`` points\nNew elo: ``{elo}``', color='FF0000')
+        lostweb = DiscordEmbed(title='Lose', description=f'Lost ``-{e_change}`` points\nNew elo: ``{elo}``\nTime app is open ``{startingtime}``', color='FF0000')
         webhook.add_embed(lostweb)
         print(Panel(
             renderable=f"Account: {name}\nELO: {elo} (-{e_change})",
