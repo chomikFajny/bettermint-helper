@@ -4,7 +4,9 @@ placeholder for image!
 
 <h3>Features</h3>
 ✅ - webhook integration
+<br>
 ✅ - blitz, rapid, bullet mode support
+<br>
 ❌ - puzzles and any other gamemode than rapid, blitz, bullet **not supported**!
 
 ###
