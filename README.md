@@ -7,7 +7,7 @@ placeholder for image!
 <br>
 ✅ - blitz, rapid, bullet mode support
 <br>
-❌ - puzzles and any other gamemode than rapid, blitz, bullet <b>not supported</b>!
+❌ - puzzles and any other gamemode than rapid, blitz, bullet are <b>not supported</b>!
 <br>
 <br>
 <br>
