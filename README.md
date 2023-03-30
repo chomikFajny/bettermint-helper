@@ -8,8 +8,8 @@ placeholder for image!
 ✅ - blitz, rapid, bullet mode support
 <br>
 ❌ - puzzles and any other gamemode than rapid, blitz, bullet <b>not supported</b>!
-
-<img src="/img/discordwebhook.gif" alt="image failed to load!"/>
+<br>
+<img src="/img/discordwebhook.png" alt="image failed to load!"/>
 
 ###
 
