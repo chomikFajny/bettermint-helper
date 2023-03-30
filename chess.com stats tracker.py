@@ -73,24 +73,21 @@ with open("proxies.txt", "r") as f:
         line = line.strip()
         ip, port = line.split(":")
         proxies[ip] = port
-        
+
 startingtime = 0
-
 name = input("name: ")
-timein = int(input("time of waiting till sending (seconds): "))
-webhookin = input("webhook link: ")
-mode = input("enter mode that u play play on: ")
-webhook = DiscordWebhook(url=webhookin)
+timein = int(input("time of waiting till sending (seconds): ")) #Do not set low or rate limit, reccomended 120-150 seconds
+webhookin = input("webhook link: Type N to skip: ")
 
-#Panel Profit
-panel_profit_title = "Profit"
-panel_profit_color = "green"
-#Panel Lose 
-panel_lose_title = "Lose"
-panel_lose_color = "red"
-#Panel Neutral
-panel_neutral_title = "-x-"
-panel_neutral_color = "yellow"
+if webhookin.lower() == "n":
+    webhook_on = False
+    webhookin = None
+if webhookin != None:
+    webhook_on = True
+    webhook = DiscordWebhook(url=webhookin)
+    
+
+mode = 'rapid' #WHICH MODE YOU ARE ABOUT TO PLAY IN: rapid, blitz, bullet
 
 simpl = simplpromt()
 
@@ -98,6 +95,7 @@ simpl = simplpromt()
 
 oldstat = requests.get(f"https://api.chess.com/pub/player/{name}/stats").json()
 #mode selector
+
 mode = mode.lower()
 if mode == 'bullet':
     oldstat1 = oldstat["chess_bullet"]
@@ -107,25 +105,10 @@ elif mode == 'rapid':
     oldstat1 = oldstat["chess_rapid"] # or chess_rapid or chess_blitz
 oldstat2 = oldstat1["last"]
 oldelo = oldstat2["rating"]
-started = DiscordEmbed(title='Started', description=f'Started with ``{oldelo}`` elo', color='808080')
-webhook.add_embed(started)
-response = webhook.execute(remove_embeds=True)
-
-
-
-
-# print(Panel(
-#     renderable=f"Started with {oldelo} elo",
-#     title="BetterMintHelper",
-#     title_align="center",
-#     border_style="green",
-#     padding=(1, 1),
-#     expand=False,
-#     style="bold",
-#     width=30,
-#     height=5,
-# ))
-
+if webhook_on:
+    started = DiscordEmbed(title='Started', description=f'Started with ``{oldelo}`` elo', color='808080')
+    webhook.add_embed(started)
+    response = webhook.execute(remove_embeds=True)
 
 
 while True:
@@ -141,8 +124,11 @@ while True:
     if elo >= oldelo:
         startingtime = (startingtime + timein) / 60
         e_change = elo - oldelo
-        wonweb = DiscordEmbed(title='Profit', description=f'Gain ``+{e_change}`` points\nNew elo: ``{elo}``\nTime app is open ``{startingtime}``', color='00ff00')
-        webhook.add_embed(wonweb)
+        
+        if webhook_on:
+            wonweb = DiscordEmbed(title='Profit', description=f'Gain ``+{e_change}`` points\nNew elo: ``{elo}``\nTime app is open ``{startingtime}``', color='00ff00')
+            webhook.add_embed(wonweb)
+            
         print("profit!")
         e_change = elo - oldelo
         print(Panel(
@@ -155,15 +141,16 @@ while True:
             width=30,
             height=5,
         ))
-        
-        response = webhook.execute(remove_embeds=True)
+        if webhook_on:
+            response = webhook.execute(remove_embeds=True)
         oldelo = elo
         
     else:
         startingtime = (startingtime + timein) / 60
         e_change = oldelo - elo
-        lostweb = DiscordEmbed(title='Lose', description=f'Lost ``-{e_change}`` points\nNew elo: ``{elo}``\nTime app is open ``{startingtime}``', color='FF0000')
-        webhook.add_embed(lostweb)
+        if webhook_on:
+            lostweb = DiscordEmbed(title='Lose', description=f'Lost ``-{e_change}`` points\nNew elo: ``{elo}``\nTime app is open ``{startingtime}``', color='FF0000')
+            webhook.add_embed(lostweb)
         print(Panel(
             renderable=f"Account: {name}\nELO: {elo} (-{e_change})",
             title="BetterMintHelper",
@@ -174,6 +161,7 @@ while True:
             width=30,
             height=5,
         ))
-        response = webhook.execute(remove_embeds=True)
+        if webhook_on:
+            response = webhook.execute(remove_embeds=True)
         oldelo = elo
         
