@@ -9,6 +9,8 @@ placeholder for image!
 <br>
 ❌ - puzzles and any other gamemode than rapid, blitz, bullet <b>not supported</b>!
 <br>
+<br>
+<br>
 <img src="/img/discordwebhook.png" alt="image failed to load!"/>
 
 ###
@@ -21,3 +23,10 @@ the whole idea was to track your elo when using <a href="https://github.com/BotS
 Yes it is, It uses proxy so you dont have to worry!
 
 ###
+
+<h3>Tutorial</h3>
+<b>1. </b>Download <a href="https://www.python.org/downloads/">python</a>. If you already have it skip this step!
+<b>2. </b>Open install.bat file.
+<b>3. </b>Open the stats tracker app.
+<b>4. </b>And it should work!
+<b href="https://discord.gg/KFmvSyBwKQ">If something doesnt work you can join bettermint discord server and ask for help!</b>
