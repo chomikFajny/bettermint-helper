@@ -78,6 +78,7 @@ startingtime = 0
 name = input("name: ")
 timein = int(input("time of waiting till sending (seconds): ")) #Do not set low or rate limit, reccomended 120-150 seconds
 webhookin = input("webhook link: Type N to skip: ")
+mode = input("What mode are you playing? (rapid, blitz, bullet): ")
 
 if webhookin.lower() == "n":
     webhook_on = False
@@ -87,7 +88,6 @@ if webhookin != None:
     webhook = DiscordWebhook(url=webhookin)
     
 
-mode = 'rapid' #WHICH MODE YOU ARE ABOUT TO PLAY IN: rapid, blitz, bullet
 
 simpl = simplpromt()
 
