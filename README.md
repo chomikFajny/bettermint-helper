@@ -9,6 +9,8 @@ placeholder for image!
 <br>
 ❌ - puzzles and any other gamemode than rapid, blitz, bullet <b>not supported</b>!
 
+<img src="/img/discordwebhook.gif" alt="image failed to load!"/>
+
 ###
 
 <h3>What this project is?</h3>
