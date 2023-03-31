@@ -117,7 +117,7 @@ while True:
     prox = random.choice(proxies)
     simpl.update(f"Name: [b]{name}[/], Time: [green]{timein}[/], Proxy: [blue]{prox}[/], Mode: [yellow]{mode}[/]")
 
-    time.sleep(timein)
+    
     try:
         stat = requests.get(f"https://api.chess.com/pub/player/{name}/stats", proxies=prox).json()
     except Exception as e:
@@ -171,4 +171,7 @@ while True:
         if webhook_on:
             response = webhook.execute(remove_embeds=True)
         oldelo = elo
-        
+    
+    time.sleep(timein)
+    
+    
