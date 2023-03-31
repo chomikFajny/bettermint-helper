@@ -67,12 +67,13 @@ class simplpromt():
         print(f"  {text}")
 
 #proxies.txt is a file of socks5 proxies in the format of ip:port (one per line) extract them into a dict
-proxies = {}
-with open("proxies.txt", "r") as f:
-    for line in f:
-        line = line.strip()
-        ip, port = line.split(":")
-        proxies[ip] = port
+def Random_Proxy():
+    proxies = []
+    x = requests.get('https://api.proxyscrape.com/v2/?request=displayproxies&protocol=socks4&timeout=5000&country=all&simplified=true', stream=True)
+    for y in x.iter_lines():
+        if y: 
+            proxies.append({'http': f"socks4://{y.decode().strip()}"})
+    return random.choice(proxies)
 
 startingtime = 0
 name = input("name: ")
@@ -112,17 +113,20 @@ if webhook_on:
 
 
 while True:
-    proxy = random.choice(list(proxies.keys()))
-    use_proxy = {'http': f"socks5://{proxy}:{proxies[proxy]}"}
-    simpl.update(f"Name: [b]{name}[/], Time: [green]{timein}[/], Proxy: [blue]{proxy}[/]:[red]{proxies[proxy]}[/], Mode: [yellow]{mode}[/]")
+    prox = Random_Proxy()
+    simpl.update(f"Name: [b]{name}[/], Time: [green]{timein}[/], Proxy: [blue]{prox}[/], Mode: [yellow]{mode}[/]")
 
     time.sleep(timein)
-    stat = requests.get(f"https://api.chess.com/pub/player/{name}/stats", proxies=use_proxy).json()
+    try:
+        stat = requests.get(f"https://api.chess.com/pub/player/{name}/stats", proxies=prox).json()
+    except Exception as e:
+        print("Error, bad proxy", e)
+        continue
     stat1 = stat["chess_bullet"] # or chess_rapid or chess_blitz
     stat2 = stat1["last"]
     elo = stat2["rating"]
     if elo >= oldelo:
-        startingtime = (startingtime + timein) / 60
+        startingtime = round((startingtime + timein) / 60, 2)
         e_change = elo - oldelo
         
         if webhook_on:
@@ -146,7 +150,7 @@ while True:
         oldelo = elo
         
     else:
-        startingtime = (startingtime + timein) / 60
+        startingtime = round((startingtime + timein) / 60, 2)
         e_change = oldelo - elo
         if webhook_on:
             lostweb = DiscordEmbed(title='Lose', description=f'Lost ``-{e_change}`` points\nNew elo: ``{elo}``\nTime app is open ``{startingtime}``', color='FF0000')
