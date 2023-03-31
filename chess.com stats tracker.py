@@ -76,7 +76,7 @@ for y in x.iter_lines():
 #created full list of proxies made it so that it doesnt spam call proxyscrape which may ip ban
 
 
-startingtime = 0
+timeonsec = 0
 name = input("name: ")
 timein = int(input("time of waiting till sending (seconds): ")) #Do not set low or rate limit, reccomended 120-150 seconds
 webhookin = input("webhook link: Type N to skip: ")
@@ -127,11 +127,12 @@ while True:
     stat2 = stat1["last"]
     elo = stat2["rating"]
     if elo >= oldelo:
-        startingtime = round((startingtime + timein) / 60, 2)
+        timeonsec = timeonsec + timein
+        timeonminute = round(timeonsec / 60)
         e_change = elo - oldelo
         
         if webhook_on:
-            wonweb = DiscordEmbed(title='Profit', description=f'Gain ``+{e_change}`` points\nNew elo: ``{elo}``\nTime app is open ``{startingtime}``', color='00ff00')
+            wonweb = DiscordEmbed(title='Profit', description=f'Gain ``+{e_change}`` points\nNew elo: ``{elo}``\nTime app is open ``{timeonminute}``', color='00ff00')
             webhook.add_embed(wonweb)
             
         print("profit!")
@@ -151,10 +152,11 @@ while True:
         oldelo = elo
         
     else:
-        startingtime = round((startingtime + timein) / 60, 2)
+        timeonsec = timeonsec + timein
+        timeonminute = round(timeonsec / 60)
         e_change = oldelo - elo
         if webhook_on:
-            lostweb = DiscordEmbed(title='Lose', description=f'Lost ``-{e_change}`` points\nNew elo: ``{elo}``\nTime app is open ``{startingtime}``', color='FF0000')
+            lostweb = DiscordEmbed(title='Lose', description=f'Lost ``-{e_change}`` points\nNew elo: ``{elo}``\nTime app is open ``{timeonminute}``', color='FF0000')
             webhook.add_embed(lostweb)
         print(Panel(
             renderable=f"Account: {name}\nELO: {elo} (-{e_change})",
