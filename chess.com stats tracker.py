@@ -132,7 +132,7 @@ while True:
         e_change = elo - oldelo
         
         if webhook_on:
-            wonweb = DiscordEmbed(title='Profit', description=f'Gain ``+{e_change}`` points\nNew elo: ``{elo}``\nTime app is open ``{timeonminute}``', color='00ff00')
+            wonweb = DiscordEmbed(title='Profit', description=f'Gain ``+{e_change}`` points\nNew elo: ``{elo}``\nTime app is open ``{timeonminute}`` minutes', color='00ff00')
             webhook.add_embed(wonweb)
             
         print("profit!")
@@ -156,7 +156,7 @@ while True:
         timeonminute = round(timeonsec / 60)
         e_change = oldelo - elo
         if webhook_on:
-            lostweb = DiscordEmbed(title='Lose', description=f'Lost ``-{e_change}`` points\nNew elo: ``{elo}``\nTime app is open ``{timeonminute}``', color='FF0000')
+            lostweb = DiscordEmbed(title='Lose', description=f'Lost ``-{e_change}`` points\nNew elo: ``{elo}``\nTime app is open ``{timeonminute}`` minutes', color='FF0000')
             webhook.add_embed(lostweb)
         print(Panel(
             renderable=f"Account: {name}\nELO: {elo} (-{e_change})",
