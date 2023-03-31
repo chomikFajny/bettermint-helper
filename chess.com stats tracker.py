@@ -67,13 +67,14 @@ class simplpromt():
         print(f"  {text}")
 
 #proxies.txt is a file of socks5 proxies in the format of ip:port (one per line) extract them into a dict
-def Random_Proxy():
-    proxies = []
-    x = requests.get('https://api.proxyscrape.com/v2/?request=displayproxies&protocol=socks4&timeout=5000&country=all&simplified=true', stream=True)
-    for y in x.iter_lines():
-        if y: 
-            proxies.append({'http': f"socks4://{y.decode().strip()}"})
-    return random.choice(proxies)
+call = requests.get('https://api.proxyscrape.com/v2/?request=displayproxies&protocol=socks4&timeout=5000&country=all&simplified=true', stream=True)
+proxies = []
+x = call
+for y in x.iter_lines():
+    if y: 
+        proxies.append({'http': f"socks4://{y.decode().strip()}"})
+#created full list of proxies made it so that it doesnt spam call proxyscrape which may ip ban
+
 
 startingtime = 0
 name = input("name: ")
@@ -113,7 +114,7 @@ if webhook_on:
 
 
 while True:
-    prox = Random_Proxy()
+    prox = random.choice(proxies)
     simpl.update(f"Name: [b]{name}[/], Time: [green]{timein}[/], Proxy: [blue]{prox}[/], Mode: [yellow]{mode}[/]")
 
     time.sleep(timein)
