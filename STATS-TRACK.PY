@@ -219,13 +219,18 @@ class Tracker:
 
 Name = input("Enter your account name: ")
 TimeOut = int(input("Enter the time between each check in seconds: (Dont make it low): "))
+discordwebhk = input("Enter your discord webhook (optional): ")
+if discordwebhk:
+    Tracker(Name, TimeOut, discordwebhk).Session_Start()
+else:
+    Tracker(Name, TimeOut).Session_Start()
 
 #check if both are valid
 if Name == "" or TimeOut == "":
     print("Invalid input")
     exit()
     
-Tracker(Name, TimeOut).Session_Start()
+
 
 
 
