@@ -226,9 +226,7 @@ else:
     Tracker(Name, TimeOut).Session_Start()
 
 #check if both are valid
-if Name == "" or TimeOut == "":
-    print("Invalid input")
-    exit()
+
     
 
 
