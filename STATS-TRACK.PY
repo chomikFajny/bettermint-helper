@@ -7,6 +7,7 @@ from rich.panel import Panel
 import os, sys
 import rich.box as box
 from rich.status import Status
+import webbrowser
 
 class simplpromt():
     def __init__(self, custom_promt=None, Defaults=True) -> None:
@@ -67,8 +68,28 @@ class simplpromt():
         
         
 class Tracker:
-    def __init__(self, Acc_name, time, webhook=None) -> None:
+    def __init__(self, Acc_name, time, webhook=None, q_game=False, game_mode=None) -> None:
         #check if mode is given
+        self.q_game = q_game
+        if self.q_game:
+            self.q_inc = 0
+            game_mode = game_mode.lower()
+            if game_mode == 'rapid':
+                self.base = 600
+            elif game_mode == 'blitz':
+                self.base = 500
+            elif game_mode == 'bullet':
+                self.base = 60
+            
+            if game_mode not in ['rapid', 'blitz', 'bullet']:
+                print("Error: Invalid game mode")
+                print("Please choose custom time and increment")
+                self.q_time = input('Time game should last (in seconds) Ex: 600 for rapid: ')
+                self.q_inc = input('Increment (in seconds) Ex: 1: to q with 1 second increment: ')
+                
+            
+        
+        
         
         if webhook:
             self.webhook = DiscordWebhook(url=webhook)
@@ -163,6 +184,7 @@ class Tracker:
             if self.current_elo_rapid > self.old_elo_rapid:
                 self.simplpromt.update(f" - [bold green]Rapid[/] elo increased by [bold green]{self.current_elo_rapid - self.old_elo_rapid}[/]")
                 self.old_elo_rapid = self.current_elo_rapid
+                self.queue_game()
                 if self.webhook:
                     self.webhook.content = f"Rapid elo increased by {self.current_elo_rapid - self.old_elo_rapid}"
                     self.webhook.execute()
@@ -170,6 +192,7 @@ class Tracker:
             elif self.current_elo_rapid < self.old_elo_rapid:
                 self.simplpromt.update(f" - [bold red]Rapid[/] elo decreased by [bold red]{self.old_elo_rapid - self.current_elo_rapid}[/]")
                 self.old_elo_rapid = self.current_elo_rapid
+                self.queue_game()
                 if self.webhook:
                     self.webhook.content = f"Rapid elo decreased by {self.old_elo_rapid - self.current_elo_rapid}"
                     self.webhook.execute()
@@ -177,6 +200,7 @@ class Tracker:
             if self.current_elo_blitz > self.old_elo_blitz:
                 self.simplpromt.update(f" - [bold green]Blitz[/] elo increased by [bold green]{self.current_elo_blitz - self.old_elo_blitz}[/]")
                 self.old_elo_blitz = self.current_elo_blitz
+                self.queue_game()
                 if self.webhook:
                     self.webhook.content = f"Blitz elo increased by {self.current_elo_blitz - self.old_elo_blitz}"
                     self.webhook.execute()
@@ -184,6 +208,7 @@ class Tracker:
             elif self.current_elo_blitz < self.old_elo_blitz:
                 self.simplpromt.update(f" - [bold red]Blitz[/] elo decreased by [bold red]{self.old_elo_blitz - self.current_elo_blitz}[/]")
                 self.old_elo_blitz = self.current_elo_blitz
+                self.queue_game()
                 if self.webhook:
                     self.webhook.content = f"Blitz elo decreased by {self.old_elo_blitz - self.current_elo_blitz}"
                     self.webhook.execute()
@@ -191,6 +216,7 @@ class Tracker:
             if self.current_elo_bullet > self.old_elo_bullet:
                 self.simplpromt.update(f" - [bold green]Bullet[/] elo increased by [bold green]{self.current_elo_bullet - self.old_elo_bullet}[/]")
                 self.old_elo_bullet = self.current_elo_bullet
+                self.queue_game()
                 if self.webhook:
                     self.webhook.content = f"Bullet elo increased by {self.current_elo_bullet - self.old_elo_bullet}"
                     self.webhook.execute()
@@ -198,6 +224,7 @@ class Tracker:
             elif self.current_elo_bullet < self.old_elo_bullet:
                 self.simplpromt.update(f" - [bold red]Bullet[/] elo decreased by [bold red]{self.old_elo_bullet - self.current_elo_bullet}[/]")
                 self.old_elo_bullet = self.current_elo_bullet
+                self.queue_game()
                 if self.webhook:
                     self.webhook.content = f"Bullet elo decreased by {self.old_elo_bullet - self.current_elo_bullet}"
                     self.webhook.execute()
@@ -210,6 +237,16 @@ class Tracker:
                     self.webhook.execute()
 
             time.sleep(self.time)
+            
+    def queue_game(self):
+        if self.q_game:
+            self.simplpromt.update(f" - Auto queueing game has been enabled, Queueing game...")
+            
+        
+            gen_api = f"https://www.chess.com/play/online/new?action=createLiveChallenge&base={self.base}&timeIncrement={self.q_inc}"
+            
+            
+            webbrowser.open_new(gen_api)
         
             
             
@@ -219,7 +256,14 @@ class Tracker:
 
 Name = input("Enter your account name: ")
 TimeOut = int(input("Enter the time between each check in seconds: (Dont make it low): "))
-discordwebhk = input("Enter your discord webhook (optional): ")
+discordwebhk = input("Enter your discord webhook (optional) Just press enter to ignore: ")
+q_game = input("Do you want to auto queue a game? (y/n): ")
+if 'y' in q_game:
+    gamemode = input("Enter the gamemode you want to play (rapid/blitz/bullet): ")
+    if gamemode not in ['rapid', 'blitz', 'bullet']:
+        print("Invalid gamemode, Exiting...")
+        exit()
+    Tracker(Name, TimeOut, discordwebhk, True, gamemode).Session_Start()
 if discordwebhk:
     Tracker(Name, TimeOut, discordwebhk).Session_Start()
 else:
