@@ -8,6 +8,7 @@ import os, sys
 import rich.box as box
 from rich.status import Status
 import webbrowser
+import keyboard
 
 class simplpromt():
     def __init__(self, custom_promt=None, Defaults=True) -> None:
@@ -245,8 +246,13 @@ class Tracker:
         
             gen_api = f"https://www.chess.com/play/online/new?action=createLiveChallenge&base={self.base}&timeIncrement={self.q_inc}"
             
-            
+            #simulate ctrl + w
+            keyboard.press_and_release('ctrl+w')
+            #open google
             webbrowser.open_new(gen_api)
+            #final step
+            time.sleep(2)
+            keyboard.press_and_release('ctrl+f5')
         
             
             
