@@ -1,3 +1,4 @@
 requests
 discord_webhook
 rich
+keyboard
