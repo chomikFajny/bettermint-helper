@@ -144,17 +144,33 @@ class Tracker:
             except:
                 pass
             
-            self.old_elo_rapid = contact['chess_rapid']['last']['rating']
-            self.old_elo_blitz = contact['chess_blitz']['last']['rating']
-            self.old_elo_bullet = contact['chess_bullet']['last']['rating']
+            try:
+                self.old_elo_rapid = contact['chess_rapid']['last']['rating']
+            except Exception:
+                self.simplpromt.update(f" - [bold red]rapid not found.... setting to 0[/]")
+                self.old_elo_rapid = 0
+                
+            try:
+                self.old_elo_blitz = contact['chess_blitz']['last']['rating']
+            except Exception:
+                self.simplpromt.update(f" - [bold red]blitz not found.... setting to 0[/]")
+                self.old_elo_blitz = 0
+                
+            try:
+                self.old_elo_bullet = contact['chess_bullet']['last']['rating']
+            except Exception:
+                self.simplpromt.update(f" - [bold red]bullet not found.... setting to 0[/]")
+                self.old_elo_bullet = 0
+          
+                
             
             
             
             self.simplpromt.update(f" - First contact with api successful")
             
             
-            
-            renderable = f" Rating in rapid: [green]{contact['chess_rapid']['last']['rating']}[/]\n Rating in blitz: [yellow]{contact['chess_blitz']['last']['rating']}[/]\n Rating in bullet: [red]{contact['chess_bullet']['last']['rating']}[/]"
+
+            renderable = f" Rating in rapid: [green]{self.old_elo_rapid}[/]\n Rating in blitz: [yellow]{self.old_elo_blitz}[/]\n Rating in bullet: [red]{self.old_elo_bullet}[/]"
             
             panel = Panel(
                 renderable=renderable,
@@ -175,9 +191,25 @@ class Tracker:
         
         while True:
             contact = requests.get(f"https://api.chess.com/pub/player/{self.name}/stats", proxies=self.give_proxy()).json()
-            self.current_elo_rapid = contact['chess_rapid']['last']['rating']
-            self.current_elo_blitz = contact['chess_blitz']['last']['rating']
-            self.current_elo_bullet = contact['chess_bullet']['last']['rating']
+            
+            try: 
+                self.current_elo_rapid = contact['chess_rapid']['last']['rating']
+            except Exception:
+                self.simplpromt.update(f" - [bold red]rapid not found.... setting to 0[/]")
+                self.current_elo_rapid = 0
+            
+            try:
+                self.current_elo_blitz = contact['chess_blitz']['last']['rating']   
+            except Exception:
+                self.simplpromt.update(f" - [bold red]blitz not found.... setting to 0[/]")
+                self.current_elo_blitz = 0
+                
+            try:
+                self.current_elo_bullet = contact['chess_bullet']['last']['rating']
+            except Exception:
+                self.simplpromt.update(f" - [bold red]bullet not found.... setting to 0[/]")
+                self.current_elo_bullet = 0
+                
         
         
             #Be checking all 3 at the same time
