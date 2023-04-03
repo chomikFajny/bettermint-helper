@@ -78,7 +78,7 @@ class Tracker:
             if game_mode == 'rapid':
                 self.base = 600
             elif game_mode == 'blitz':
-                self.base = 500
+                self.base = 180
             elif game_mode == 'bullet':
                 self.base = 60
             
