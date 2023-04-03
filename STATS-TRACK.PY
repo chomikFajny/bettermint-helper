@@ -301,7 +301,12 @@ if 'y' in q_game:
     if gamemode not in ['rapid', 'blitz', 'bullet']:
         print("Invalid gamemode, Exiting...")
         exit()
-    Tracker(Name, TimeOut, discordwebhk, True, gamemode).Session_Start()
+        
+
+    if discordwebhk:
+        Tracker(Name, TimeOut, discordwebhk,True, gamemode).Session_Start()
+    else:
+        Tracker(Name, TimeOut, True, gamemode).Session_Start()
 if discordwebhk:
     Tracker(Name, TimeOut, discordwebhk).Session_Start()
 else:
