@@ -74,7 +74,7 @@ class Tracker:
         self.q_game = q_game
         if self.q_game:
             self.q_inc = 0
-            game_mode = game_mode.lower()
+            game_mode = game_mode
             if game_mode == 'rapid':
                 self.base = 600
             elif game_mode == 'blitz':
@@ -301,12 +301,9 @@ if 'y' in q_game:
     if gamemode not in ['rapid', 'blitz', 'bullet']:
         print("Invalid gamemode, Exiting...")
         exit()
-        
+    Tracker(Name, TimeOut, discordwebhk, q_game, gamemode).Session_Start()    
 
-    if discordwebhk:
-        Tracker(Name, TimeOut, discordwebhk,True, gamemode).Session_Start()
-    else:
-        Tracker(Name, TimeOut, True, gamemode).Session_Start()
+    
 if discordwebhk:
     Tracker(Name, TimeOut, discordwebhk).Session_Start()
 else:
